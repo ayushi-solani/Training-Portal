@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %} — Dashboard{% endblock %}
+{% block content %}
+<div class="page-header mb-4">
+  <h4><i class="bi bi-grid-1x2 me-2"></i>Welcome, {{ session.user_name }}</h4>
+  <p>{{ session.dept }}</p>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3">
+    <div class="stat-card card text-white" style="background:#003366;">
+      <div class="card-body"><div class="stat-value">{{ stats.total }}</div><div class="stat-label">Registered</div></div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="stat-card card text-white" style="background:#0077b6;">
+      <div class="card-body"><div class="stat-value">{{ stats.ongoing }}</div><div class="stat-label">Ongoing</div></div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="stat-card card text-white" style="background:#FF6600;">
+      <div class="card-body"><div class="stat-value">{{ stats.need_fb }}</div><div class="stat-label">Need Feedback</div></div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="stat-card card text-white" style="background:#2d6a4f;">
+      <div class="card-body"><div class="stat-value">{{ stats.finished }}</div><div class="stat-label">Finished</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span><i class="bi bi-journal-check me-2"></i>Recent Trainings</span>
+    <a href="{{ url_for('employee_my_trainings') }}" class="btn btn-sm btn-navy">View All</a>
+  </div>
+  <div class="card-body p-0">
+    {% if my_regs %}
+    <table class="table table-hover mb-0">
+      <thead><tr><th>Training</th><th>Dates</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        {% for t in my_regs %}
+        <tr>
+          <td><strong>{{ t.title }}</strong><br><small class="text-muted">{{ t.department }}</small></td>
+          <td class="small">{{ t.start_date }} → {{ t.end_date }}</td>
+          <td><span class="badge bg-secondary">{{ t.status }}</span></td>
+          <td>
+            {% if t.status == 'Need Feedback' %}
+            <a href="{{ url_for('employee_feedback', tid=t.id) }}" class="btn btn-sm btn-orange">Feedback</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="p-4 text-center text-muted">No trainings yet. <a href="{{ url_for('employee_browse') }}">Browse now</a></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

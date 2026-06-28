@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %} — HR Dashboard{% endblock %}
+{% block content %}
+<div class="page-header mb-4">
+  <h4><i class="bi bi-speedometer2 me-2"></i>HR Dashboard</h4>
+  <p>Training Portal Overview</p>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3">
+    <div class="stat-card card text-white" style="background:#003366;">
+      <div class="card-body"><div class="stat-value">{{ stats.total_trainings }}</div><div class="stat-label">Trainings</div></div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="stat-card card text-white" style="background:#0077b6;">
+      <div class="card-body"><div class="stat-value">{{ stats.total_employees }}</div><div class="stat-label">Employees</div></div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="stat-card card text-white" style="background:#FF6600;">
+      <div class="card-body"><div class="stat-value">{{ stats.pending_requests }}</div><div class="stat-label">Pending Requests</div></div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="stat-card card text-white" style="background:#2d6a4f;">
+      <div class="card-body"><div class="stat-value">{{ stats.total_regs }}</div><div class="stat-label">Registrations</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span><i class="bi bi-mortarboard me-2"></i>Recent Trainings</span>
+    <a href="{{ url_for('hr_trainings') }}" class="btn btn-sm btn-navy">Manage All</a>
+  </div>
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0">
+      <thead><tr><th>Title</th><th>Dates</th><th>Registrations</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        {% for t in recent %}
+        <tr>
+          <td><strong>{{ t.title }}</strong></td>
+          <td class="small">{{ t.start_date }} → {{ t.end_date }}</td>
+          <td>{{ t.reg_count }}</td>
+          <td><span class="badge bg-secondary">{{ t.status }}</span></td>
+          <td><a href="{{ url_for('hr_registrations', tid=t.id) }}" class="btn btn-sm btn-outline-navy">View</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

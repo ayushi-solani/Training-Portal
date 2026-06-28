@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %} — Employee Requests{% endblock %}
+{% block content %}
+<div class="page-header mb-4">
+  <h4><i class="bi bi-inbox me-2"></i>Employee Training Requests</h4>
+</div>
+
+{% for r in requests %}
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <h6 class="fw-bold mb-1">{{ r.topic }}</h6>
+        <div class="small text-muted mb-1">By: {{ r.full_name }} — {{ r.department }}</div>
+        <div class="small text-muted">{{ r.reason or 'No reason provided.' }}</div>
+      </div>
+      <span class="badge
+        {% if r.status=='approved' %}bg-success
+        {% elif r.status=='rejected' %}bg-danger
+        {% else %}bg-warning text-dark{% endif %}">
+        {{ r.status }}
+      </span>
+    </div>
+
+    {% if r.status == 'pending' %}
+    <div class="row g-3 mt-2">
+      <div class="col-md-6">
+        <div class="card p-3 border-success">
+          <h6 class="text-success mb-2">Approve & List Training</h6>
+          <form method="POST" action="{{ url_for('hr_approve_request', rid=r.id) }}">
+            <div class="row g-2">
+              <div class="col-12">
+                <input type="text" name="title" class="form-control form-control-sm" required placeholder="Training title" value="{{ r.topic }}"/>
+              </div>
+              <div class="col-12">
+                <input type="text" name="department" class="form-control form-control-sm" placeholder="Conducting dept"/>
+              </div>
+              <div class="col-6">
+                <label class="form-label" style="font-size:.75rem;">Reg Open</label>
+                <input type="date" name="reg_open_date" class="form-control form-control-sm" required/>
+              </div>
+              <div class="col-6">
+                <label class="form-label" style="font-size:.75rem;">Reg Close</label>
+                <input type="date" name="reg_close_date" class="form-control form-control-sm" required/>
+              </div>
+              <div class="col-6">
+                <label class="form-label" style="font-size:.75rem;">Start Date</label>
+                <input type="date" name="start_date" class="form-control form-control-sm" required/>
+              </div>
+              <div class="col-6">
+                <label class="form-label" style="font-size:.75rem;">End Date</label>
+                <input type="date" name="end_date" class="form-control form-control-sm" required/>
+              </div>
+              <div class="col-6">
+                <input type="number" name="max_seats" class="form-control form-control-sm" value="50" placeholder="Max seats"/>
+              </div>
+              <div class="col-12">
+                <input type="text" name="remarks" class="form-control form-control-sm" placeholder="Remarks (optional)"/>
+              </div>
+              <div class="col-12">
+                <button class="btn btn-sm btn-success w-100">Approve & List</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card p-3 border-danger">
+          <h6 class="text-danger mb-2">Reject Request</h6>
+          <form method="POST" action="{{ url_for('hr_reject_request', rid=r.id) }}">
+            <textarea name="remarks" rows="3" class="form-control form-control-sm mb-2" placeholder="Reason for rejection…"></textarea>
+            <button class="btn btn-sm btn-danger w-100">Reject</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% elif r.hr_remarks %}
+    <div class="mt-2 small text-muted"><strong>HR Remarks:</strong> {{ r.hr_remarks }}</div>
+    {% endif %}
+  </div>
+</div>
+{% else %}
+<div class="text-center text-muted py-5">No requests yet.</div>
+{% endfor %}
+{% endblock %}

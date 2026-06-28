@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %} — Browse Trainings{% endblock %}
+{% block content %}
+<div class="page-header mb-4">
+  <h4><i class="bi bi-search me-2"></i>Browse Trainings</h4>
+</div>
+
+<form method="GET" class="filter-bar mb-4">
+  <input type="text" name="q" class="form-control" style="max-width:260px;" placeholder="Search title or topic…" value="{{ search }}"/>
+  <select name="dept" class="form-select" style="max-width:220px;">
+    <option value="">All Departments</option>
+    {% for d in departments %}
+    <option value="{{ d }}" {{ 'selected' if d==selected_dept }}>{{ d }}</option>
+    {% endfor %}
+  </select>
+  <button class="btn btn-navy">Filter</button>
+  {% if search or selected_dept %}<a href="{{ url_for('employee_browse') }}" class="btn btn-outline-secondary">Clear</a>{% endif %}
+</form>
+
+{% if trainings %}
+<div class="row g-3">
+  {% for t in trainings %}
+  <div class="col-md-4">
+    <div class="position-card p-3 h-100 d-flex flex-column">
+      <div class="mb-2">
+        <span class="dept-tag">{{ t.department or 'General' }}</span>
+        <span class="badge ms-1
+          {% if t.status=='Registration' %}bg-success
+          {% elif t.status=='Ongoing' %}bg-primary
+          {% elif t.status=='Upcoming' %}bg-warning text-dark
+          {% else %}bg-secondary{% endif %}">
+          {{ t.status }}
+        </span>
+      </div>
+      <h6 class="fw-bold mb-1">{{ t.title }}</h6>
+      <div class="text-muted small mb-2">{{ t.topic }}</div>
+      <div class="small mb-1"><i class="bi bi-calendar3 me-1"></i>{{ t.start_date }} → {{ t.end_date }}</div>
+      <div class="small mb-2"><i class="bi bi-person me-1"></i>{{ t.trainer_name or 'TBD' }} &nbsp;|&nbsp; <i class="bi bi-people me-1"></i>{{ t.seats_left }} seats left</div>
+      <div class="mt-auto">
+        {% if t.is_registered %}
+        <span class="btn btn-sm btn-outline-success w-100 disabled"><i class="bi bi-check-circle me-1"></i>Registered</span>
+        {% elif t.status == 'Registration' %}
+        <form method="POST" action="{{ url_for('employee_register', tid=t.id) }}">
+          <button class="btn btn-sm btn-navy w-100">Register</button>
+        </form>
+        {% else %}
+        <span class="btn btn-sm btn-outline-secondary w-100 disabled">{{ t.status }}</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="text-center text-muted py-5">No trainings found.</div>
+{% endif %}
+{% endblock %}

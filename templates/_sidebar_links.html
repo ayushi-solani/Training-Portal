@@ -1,0 +1,19 @@
+{% if session.role == 'employee' %}
+<div class="sidebar-section">Employee</div>
+<ul class="nav flex-column">
+  <li><a class="nav-link {% if request.endpoint=='employee_dashboard' %}active{% endif %}" href="{{ url_for('employee_dashboard') }}"><i class="bi bi-grid-1x2"></i> Dashboard</a></li>
+  <li><a class="nav-link {% if request.endpoint=='employee_browse' %}active{% endif %}" href="{{ url_for('employee_browse') }}"><i class="bi bi-search"></i> Browse Trainings</a></li>
+  <li><a class="nav-link {% if request.endpoint=='employee_my_trainings' %}active{% endif %}" href="{{ url_for('employee_my_trainings') }}"><i class="bi bi-journal-check"></i> My Trainings</a></li>
+  <li><a class="nav-link {% if request.endpoint=='employee_request' %}active{% endif %}" href="{{ url_for('employee_request') }}"><i class="bi bi-send"></i> Request Training</a></li>
+</ul>
+{% elif session.role == 'hr' %}
+<div class="sidebar-section">HR Panel</div>
+<ul class="nav flex-column">
+  <li><a class="nav-link {% if request.endpoint=='hr_dashboard' %}active{% endif %}" href="{{ url_for('hr_dashboard') }}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+  <li><a class="nav-link {% if request.endpoint=='hr_trainings' %}active{% endif %}" href="{{ url_for('hr_trainings') }}"><i class="bi bi-mortarboard"></i> Manage Trainings</a></li>
+  <li><a class="nav-link {% if request.endpoint=='hr_requests' %}active{% endif %}" href="{{ url_for('hr_requests') }}"><i class="bi bi-inbox"></i> Requests</a></li>
+</ul>
+{% endif %}
+<div class="sidebar-footer">
+  <a class="nav-link text-danger" href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i> Logout</a>
+</div>

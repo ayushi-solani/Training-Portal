@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %} — Feedback{% endblock %}
+{% block content %}
+<div class="page-header mb-4">
+  <h4><i class="bi bi-star me-2"></i>Training Feedback</h4>
+  <p>{{ training.title }}</p>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    {% if existing_fb %}
+    <div class="card p-4 text-center">
+      <i class="bi bi-check-circle-fill text-success" style="font-size:3rem;"></i>
+      <h5 class="mt-3">Feedback Already Submitted</h5>
+      <p class="text-muted">Rating: {{ existing_fb.rating }}/5</p>
+      <a href="{{ url_for('employee_my_trainings') }}" class="btn btn-navy">Back to My Trainings</a>
+    </div>
+    {% else %}
+    <div class="card p-4">
+      <form method="POST">
+        <div class="mb-3">
+          <label class="form-label">Rating</label>
+          <select name="rating" class="form-select" required>
+            <option value="">Select rating</option>
+            <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+            <option value="4">⭐⭐⭐⭐ Good</option>
+            <option value="3">⭐⭐⭐ Average</option>
+            <option value="2">⭐⭐ Poor</option>
+            <option value="1">⭐ Very Poor</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Comments <span class="text-muted fw-normal">(optional)</span></label>
+          <textarea name="comments" rows="4" class="form-control" placeholder="Share your experience…"></textarea>
+        </div>
+        <button class="btn btn-navy w-100">Submit Feedback</button>
+      </form>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

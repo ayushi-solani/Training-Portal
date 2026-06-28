@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %} — Registrations{% endblock %}
+{% block content %}
+<div class="page-header mb-4">
+  <h4><i class="bi bi-people me-2"></i>{{ training.title }}</h4>
+  <p>{{ training.start_date }} → {{ training.end_date }} &nbsp;|&nbsp; {{ training.department }}</p>
+</div>
+
+<div class="card mb-3">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span>Registered Employees ({{ regs|length }})</span>
+    <button class="btn btn-sm btn-orange" data-bs-toggle="modal" data-bs-target="#forwardModal">
+      <i class="bi bi-envelope me-1"></i>Forward List
+    </button>
+  </div>
+  <div class="card-body p-0">
+    {% if regs %}
+    <table class="table table-hover mb-0">
+      <thead><tr><th>Name</th><th>Email</th><th>Department</th><th>Registered On</th></tr></thead>
+      <tbody>
+        {% for r in regs %}
+        <tr>
+          <td>{{ r.full_name }}</td>
+          <td class="small">{{ r.email }}</td>
+          <td class="small">{{ r.department }}</td>
+          <td class="small">{{ r.registered_at }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="p-4 text-center text-muted">No registrations yet.</div>
+    {% endif %}
+  </div>
+</div>
+
+<a href="{{ url_for('hr_trainings') }}" class="btn btn-outline-secondary">← Back</a>
+
+<!-- Forward Modal -->
+<div class="modal fade" id="forwardModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Forward Employee List</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form method="POST" action="{{ url_for('hr_forward', tid=training.id) }}">
+        <div class="modal-body">
+          <p class="text-muted small mb-3">
+            This will email the list of <strong>{{ regs|length }} registered employees</strong>
+            for <strong>{{ training.title }}</strong> to the conducting department.
+          </p>
+          <label class="form-label">Recipient Email</label>
+          <input type="email" name="to_email" class="form-control" required placeholder="department@drdo.gov.in"/>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-navy">Send Email</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

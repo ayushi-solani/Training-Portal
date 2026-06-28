@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %} — Manage Trainings{% endblock %}
+{% block content %}
+<div class="page-header mb-4 d-flex justify-content-between align-items-center">
+  <div>
+    <h4><i class="bi bi-mortarboard me-2"></i>Manage Trainings</h4>
+  </div>
+  <a href="{{ url_for('hr_create_training') }}" class="btn btn-orange"><i class="bi bi-plus-circle me-1"></i>Create Training</a>
+</div>
+
+<div class="card">
+  <div class="card-body p-0">
+    {% if trainings %}
+    <table class="table table-hover mb-0">
+      <thead><tr><th>Title</th><th>Department</th><th>Dates</th><th>Seats</th><th>Registered</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        {% for t in trainings %}
+        <tr>
+          <td><strong>{{ t.title }}</strong><br><small class="text-muted">{{ t.topic }}</small></td>
+          <td class="small">{{ t.department or '—' }}</td>
+          <td class="small">{{ t.start_date }} → {{ t.end_date }}</td>
+          <td>{{ t.max_seats }}</td>
+          <td>{{ t.reg_count }}</td>
+          <td><span class="badge bg-secondary">{{ t.status }}</span></td>
+          <td><a href="{{ url_for('hr_registrations', tid=t.id) }}" class="btn btn-sm btn-navy">Registrations</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="p-4 text-center text-muted">No trainings yet. <a href="{{ url_for('hr_create_training') }}">Create one</a></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

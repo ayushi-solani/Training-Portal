@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %} — Request Training{% endblock %}
+{% block content %}
+<div class="page-header mb-4">
+  <h4><i class="bi bi-send me-2"></i>Request a Training</h4>
+  <p>Can't find what you need? Request a specific topic and HR will review it.</p>
+</div>
+
+<div class="row g-4">
+  <div class="col-md-5">
+    <div class="card p-4">
+      <h6 class="fw-bold mb-3">New Request</h6>
+      <form method="POST">
+        <div class="mb-3">
+          <label class="form-label">Topic / Subject</label>
+          <input type="text" name="topic" class="form-control" required placeholder="e.g. Quantum Computing, SQL Advanced…"/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Reason <span class="text-muted fw-normal">(optional)</span></label>
+          <textarea name="reason" rows="4" class="form-control" placeholder="Why do you need this training?"></textarea>
+        </div>
+        <button class="btn btn-navy w-100">Submit Request</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="col-md-7">
+    <div class="card">
+      <div class="card-header"><i class="bi bi-clock-history me-2"></i>My Requests</div>
+      <div class="card-body p-0">
+        {% if my_requests %}
+        <table class="table mb-0">
+          <thead><tr><th>Topic</th><th>Status</th><th>Remarks</th></tr></thead>
+          <tbody>
+            {% for r in my_requests %}
+            <tr>
+              <td>{{ r.topic }}</td>
+              <td>
+                <span class="badge
+                  {% if r.status=='approved' %}bg-success
+                  {% elif r.status=='rejected' %}bg-danger
+                  {% else %}bg-warning text-dark{% endif %}">
+                  {{ r.status }}
+                </span>
+              </td>
+              <td class="small text-muted">{{ r.hr_remarks or '—' }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div class="p-4 text-center text-muted">No requests yet.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

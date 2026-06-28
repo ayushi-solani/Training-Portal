@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %} — Create Training{% endblock %}
+{% block content %}
+<div class="page-header mb-4">
+  <h4><i class="bi bi-plus-circle me-2"></i>Create Training</h4>
+</div>
+
+<div class="card p-4" style="max-width:700px;">
+  <form method="POST">
+    <div class="row g-3">
+      <div class="col-12">
+        <label class="form-label">Title</label>
+        <input type="text" name="title" class="form-control" required placeholder="e.g. Advanced SQL for DRDO"/>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Topic</label>
+        <input type="text" name="topic" class="form-control" placeholder="e.g. SQL, Quantum Computing"/>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Conducting Department</label>
+        <input type="text" name="department" class="form-control" placeholder="e.g. Computer Science"/>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Trainer Name</label>
+        <input type="text" name="trainer_name" class="form-control"/>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Max Seats</label>
+        <input type="number" name="max_seats" class="form-control" value="50" min="1"/>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Registration Opens</label>
+        <input type="date" name="reg_open_date" class="form-control" required/>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Registration Closes</label>
+        <input type="date" name="reg_close_date" class="form-control" required/>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Training Start Date</label>
+        <input type="date" name="start_date" class="form-control" required/>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Training End Date</label>
+        <input type="date" name="end_date" class="form-control" required/>
+      </div>
+      <div class="col-12">
+        <label class="form-label">Description</label>
+        <textarea name="description" rows="3" class="form-control" placeholder="Brief description…"></textarea>
+      </div>
+      <div class="col-12 d-flex gap-2">
+        <button class="btn btn-navy">Create Training</button>
+        <a href="{{ url_for('hr_trainings') }}" class="btn btn-outline-secondary">Cancel</a>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

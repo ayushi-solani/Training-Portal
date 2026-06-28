@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %} — My Trainings{% endblock %}
+{% block content %}
+<div class="page-header mb-4">
+  <h4><i class="bi bi-journal-check me-2"></i>My Trainings</h4>
+</div>
+
+{% if regs %}
+<div class="card">
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0">
+      <thead><tr><th>Training</th><th>Department</th><th>Dates</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody>
+        {% for t in regs %}
+        <tr>
+          <td><strong>{{ t.title }}</strong><br><small class="text-muted">{{ t.topic }}</small></td>
+          <td class="small">{{ t.department }}</td>
+          <td class="small">{{ t.start_date }} → {{ t.end_date }}</td>
+          <td>
+            <span class="badge
+              {% if t.status=='Registration' %}bg-success
+              {% elif t.status=='Ongoing' %}bg-primary
+              {% elif t.status=='Need Feedback' %}bg-warning text-dark
+              {% elif t.status=='Finished' %}bg-secondary
+              {% else %}bg-light text-dark{% endif %}">
+              {{ t.status }}
+            </span>
+          </td>
+          <td>
+            {% if t.status == 'Need Feedback' %}
+            <a href="{{ url_for('employee_feedback', tid=t.id) }}" class="btn btn-sm btn-orange">Give Feedback</a>
+            {% elif t.status == 'Finished' %}
+            <span class="text-success small"><i class="bi bi-check-circle"></i> Done</span>
+            {% else %}—{% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% else %}
+<div class="text-center text-muted py-5">
+  You haven't registered for any trainings yet.<br>
+  <a href="{{ url_for('employee_browse') }}" class="btn btn-navy mt-3">Browse Trainings</a>
+</div>
+{% endif %}
+{% endblock %}
